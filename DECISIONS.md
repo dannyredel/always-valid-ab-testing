@@ -4,13 +4,13 @@ From brief §11. Update the status column when Daniel decides; add the date.
 
 | # | Decision | Default | Status |
 |---|---|---|---|
-| 1 | Product and company names | Keep "Live A/B Lab", "Questline", "Starter Bonus" | Default |
+| 1 | Product and company names | Keep "Live A/B Lab", "Questline", "Starter Bonus" | **Partly settled** 2026-10-13: GitHub repo "Always-Valid A/B Testing" (`always-valid-ab-testing`). The website's name stays "Live A/B Lab" for now; Daniel wants something fun, to decide later |
 | 2 | Technology stack | Proposed in [docs/vega-reuse.md](docs/vega-reuse.md); must build to a static site | **Settled** 2026-10-12 |
 | 3 | Always-valid method and tuning | Reuse Vega/Lyra if tested; else proposed in reuse report | **Settled** 2026-10-12 |
 | 4 | Refresh length, batch size, max sample | Tune by simulation to a 60–90 s verdict | **Settled** 2026-10-12: max sample 30,000 (= N*); visitor joins at hour 72; 1.5 experiment hours per refresh; minimum 1,000 players before any verdict |
 | 5 | Persona model and budget | No default | **Deferred** 2026-10-12: personas skipped for now (estimate kept in LOG) |
 | 6 | Segments in the live table | Country tier, device, acquisition channel | Default |
-| 7 | Hosting | No default | **Settled** 2026-10-12: GitHub Pages project site, dannyredel.github.io/live-ab-lab |
+| 7 | Hosting | No default | **Settled** 2026-10-12: GitHub Pages project site, dannyredel.github.io/always-valid-ab-testing |
 | 8 | Build the targeting article | Yes, last | Default |
 
 ## Settled
@@ -33,7 +33,7 @@ From brief §11. Update the status column when Daniel decides; add the date.
 | 2026-10-12 | Page starts at hour 72 (first outcomes arriving), 1.5 experiment hours per refresh; default preset 'Small real effect' (+2 points) | Daniel agreed. Notebook 04: median verdict about 73 s for the default preset |
 | 2026-10-12 | Page timing re-tuned in the browser stream: visitor joins at **hour 80** (day 4, 08:00) with **1.75 h per update**. Median verdict for the default preset 85 s (120 runs) | Notebook 04's 73 s assumed CUPAC and steady arrivals; the browser stream has neither yet (unadjusted until M9; night-time cohorts mature first at hour 72). Joining at 08:00 also shows ~300 players on the first update instead of 44 |
 | 2026-10-12 | The page's split check is the always-valid SRM test (Lindon & Malek; savvi), flagged at p < 0.001, not χ² | A χ² checked at every update falsely flagged 38.7% of fair runs |
-| 2026-10-12 | Hosting: GitHub Pages project site (repo `live-ab-lab` → dannyredel.github.io/live-ab-lab), deployed by `.github/workflows/deploy.yml` after tests pass | Daniel delegated. Lives next to his existing dannyredel.github.io; static site needs nothing Vercel adds (per-PR previews, server functions) |
+| 2026-10-12 | Hosting: GitHub Pages project site (repo `always-valid-ab-testing` → dannyredel.github.io/always-valid-ab-testing; renamed from `live-ab-lab` before the first push, 2026-10-13), deployed by `.github/workflows/deploy.yml` after tests pass | Daniel delegated. Lives next to his existing dannyredel.github.io; static site needs nothing Vercel adds (per-PR previews, server functions) |
 | 2026-10-12 | Parallel worlds: with no effect, show wrong verdicts; with a real effect, show the lift each method reports when it ships (winner's curse) | Daniel noticed 'wrong verdict' is always 0% with a real effect. 200 worlds at +2: always-valid reports +2.47, peeking at the usual interval +3.01 |
 | 2026-10-12 | Phone layout: playback and scenario in a fixed bottom bar; data source and theme in the footer | Verdict sits under the intro instead of below three rows of controls |
 | 2026-10-12 | Theme: system by default, light/dark toggle in the footer, choice kept in localStorage (convenience only) | Brief §9 light and dark themes |

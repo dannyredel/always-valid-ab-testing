@@ -1,4 +1,4 @@
-# Builds the page and publishes it to GitHub Pages: https://dannyredel.github.io/live-ab-lab/
+# Builds the page and publishes it to GitHub Pages: https://dannyredel.github.io/always-valid-ab-testing/
 # One-time setup on GitHub: Settings → Pages → Source: "GitHub Actions".
 name: Deploy page
 

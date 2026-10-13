@@ -86,6 +86,9 @@ Built notebook-first (see `notebooks/README.md`): notebooks 01–04, reviewed, t
 - [x] `08_targeting` notebook: causal forest (econml), honest split, heterogeneity tests, DoubleML subgroup baseline, cost-side baseline, 75 repeated experiments (reviewed 2026-10-12)
 - [x] 'Ship it to whom?' page section from notebook 08 (`scripts/targeting_page.py` → `targeting.json` → `TargetingSection.svelte`)
 
+## Open
+- [ ] Website name: something fun (repo is "Always-Valid A/B Testing"; page still says "Live A/B Lab"). Daniel to decide.
+
 ## Ideas parking lot (not in scope unless Daniel says so)
 - Stricter 'does it pay': only via config (≈20× more players, kinder economics, or bigger presets); notebook 06 shows the +2 preset pays only ~0.7¢/player vs ±2.9¢ precision
 - Stronger CUPAC: stronger or extra pre-sign-up signals (config + retrain); 30% R² would narrow intervals ~16%, still far from proving 'pays'
