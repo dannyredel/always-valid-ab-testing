@@ -335,7 +335,7 @@ print("ablab.stats reproduces this notebook on all", Z.size, "experiment-looks")
 # %% [markdown]
 # ## Further reading
 #
-# Why checking the usual interval at every update inflates false alarms. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+# Why checking the usual interval at every update inflates false alarms. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[airline library: folder]** = `Projects/airline-experimentation/paper-library/pdfs/<folder>/` (a copy of Vega's library plus airline-related extras) · **[online]** = not in any library yet. ★ = read first.
 #
 # Theory notes in this project: [anytime-valid](../docs/theory/anytime-valid.md), [sequential-chapter](../docs/theory/sequential-chapter.md).
 #

@@ -415,7 +415,7 @@ print(f"ablab.power reproduces this notebook; config max_players = n_star = {N_P
 # %% [markdown]
 # ## Further reading
 #
-# How many players to plan for, when the test is checked continuously and the decision is economic. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+# How many players to plan for, when the test is checked continuously and the decision is economic. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[airline library: folder]** = `Projects/airline-experimentation/paper-library/pdfs/<folder>/` (a copy of Vega's library plus airline-related extras) · **[online]** = not in any library yet. ★ = read first.
 #
 # Theory notes in this project: [power-mde](../docs/theory/power-mde.md).
 #
@@ -425,4 +425,5 @@ print(f"ablab.power reproduces this notebook; config max_players = n_star = {N_P
 # - Spotify Engineering. *Fixed-Power Designs: It's Not IF You Peek, It's WHAT You Peek At* (blog). The blog version of the above. **[Vega: 04-sequential-anytime-valid]**
 # - Feit, E. M., & Berman, R. (2019). Test & roll: profit-maximizing A/B tests. *Marketing Science* 38(6). Sample size from profit, not significance; close to this project's break-even. **[Vega: 05-power-and-decisions]**
 # - Maharaj, A. V., et al. (2023). Anytime-valid confidence sequences in an enterprise A/B testing platform. Section on sample-size planning for confidence sequences. **[local]** `2302.10108v1.pdf`
+# - Sandorellana. *Sample Size Estimation and Monte Carlo Simulations* (Medium). Power by simulation, as in this notebook. **[airline library: 14-airline-related-topics]**
 # - Schultzberg, M. *What Makes a Good Sample Size Calculator?* (Confidence blog). Everything that changes the required N. **[Vega: 05-power-and-decisions]** (see `confidence-ssc/`)
