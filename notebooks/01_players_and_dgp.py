@@ -770,3 +770,15 @@ prod_df, _ = prod.simulate(0.02, seed=SEED, intercept=INTERCEPT, multiplier_mean
 for col in ["player_id", "tier", "device", "channel", "games_30d", "treated", "activated", "p0", "p1"]:
     assert prod_df[col].equals(df[col]), col
 print(f"ablab.simulator reproduces this notebook: {len(prod_df):,} identical players")
+
+# %% [markdown]
+# ## Further reading
+#
+# Background for the simulated world: how online experiments are set up, and how to build a simulator whose true effect you control. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+#
+# - ★ Kohavi, R., Tang, D., & Xu, Y. (2020). *Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing*. Cambridge University Press. The practitioner's reference: randomization units, metrics, guardrails. **[online]** https://doi.org/10.1017/9781108653985
+# - ★ Larsen, N., Stallrich, J., Sengupta, S., Deng, A., Kohavi, R., & Stevens, N. T. (2023). Statistical challenges in online controlled experiments: a review of A/B testing methodology. *The American Statistician*. The best single survey of the field. **[Vega: 05-power-and-decisions]** https://doi.org/10.1080/00031305.2023.2257237
+# - Evans, R. J., & Didelez, V. (2024). Parameterizing and simulating from causal models. *JRSS-B*. Building a simulator where the causal effect is a parameter you set. **[Vega: 13-dgp-simulation]**
+# - Orduz, J. C. The frugal parameterization for Bayesian causal inference in PyMC (blog). A worked example of the above. **[Vega: 13-dgp-simulation]**
+# - GrowthBook. *The Open Guide to A/B Testing* (v1.0). Practical pitfalls, in plain language. **[Vega: 08-personalization-and-platform-craft]**
+# - Fabijan, A., et al. (2019). Diagnosing sample ratio mismatch in online controlled experiments. *KDD 2019*. Why hash-based assignment is checked (more in notebook 05). **[online]** https://doi.org/10.1145/3292500.3330722

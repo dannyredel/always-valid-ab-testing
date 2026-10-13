@@ -535,3 +535,20 @@ assert np.allclose(prod_g.value_from_lift(sims["Small (+2.0)"]["adj"]["lo"], p_c
 assert prod_g.extra_cost(PLAN) == EXTRA_COST
 assert abs(EXTRA_COST * CFG["experiment"]["baseline_rate"] / (V - EXTRA_COST) - BREAK_EVEN) < 1e-12
 print("ablab.guardrail.value_from_lift reproduces this notebook's guardrail; G(lift) > 0 exactly above break-even")
+
+# %% [markdown]
+# ## Further reading
+#
+# Narrower intervals from pre-experiment information, and the economics behind the guardrail. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+#
+# Theory notes in this project: [variance-reduction](../docs/theory/variance-reduction.md).
+#
+# - ★ Deng, A., Xu, Y., Kohavi, R., & Walker, T. (2013). Improving the sensitivity of online controlled experiments by utilizing pre-experiment data. *WSDM 2013*. CUPED. **[local]** `2013-02CUPEDImprovingSensitivityOfControlledExperiments.pdf` (also Vega: 05-power-and-decisions)
+# - ★ Li, J. (2020). Improving experimental power through control using predictions as covariate (CUPAC). DoorDash Engineering blog. **[local]** `Improving Experimental Power ... (CUPAC) - DoorDash.pdf`
+# - Lin, W. (2013). Agnostic notes on regression adjustments to experimental data: reexamining Freedman's critique. *Annals of Applied Statistics* 7(1). Why regression adjustment is safe in experiments. **[online]** https://doi.org/10.1214/12-AOAS583
+# - Hosseini, R., & Najmi, A. (2019). Unbiased variance reduction in randomized experiments. arXiv:1904.03817. Any predictive model, kept unbiased. **[local]** `1904.03817v1.pdf`
+# - Williamson, E. J., Forbes, A., & White, I. R. (2014). Variance reduction in randomised trials by inverse probability weighting using the propensity score. *Statistics in Medicine* 33(5). The same idea from clinical trials. **[local]** `Statistics in Medicine - 2013 - Williamson ...pdf`
+# - Lindon, M., Ham, D. W., Tingley, M., & Bojinov, I. (2022). Anytime-valid linear models and regression adjusted causal inference in randomized experiments. arXiv:2210.08589. Regression adjustment *and* continuous monitoring together. **[online]** https://arxiv.org/abs/2210.08589
+# - Pankratev, S. (2026). Design-aware variance reduction for switchback experiments: a comparative study (CUPED, CUPAC, doubly robust). arXiv:2606.27662. **[local]** `2606.27662v2.pdf`
+# - Pankratev, S. (2026). Power-optimal covariate adjustment for switchback experiments. arXiv:2607.27376. How to train the CUPAC model for power. **[local]** `2607.27376v1.pdf`
+# - Schultzberg, M., Ankargren, S., & Frånberg, M. (2024). Risk-aware product decisions in A/B tests with multiple metrics. arXiv:2402.11609. Guardrails as non-inferiority tests. **[Vega: 05-power-and-decisions]**

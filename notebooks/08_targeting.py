@@ -643,3 +643,25 @@ for cell_name, row in truth.iterrows():
 assert abs(page["truth"]["best_possible_cents"] - true_value(TRUE_G > 0)) < 1e-9
 assert abs(page["truth"]["best_by_cell_cents"] - true_value(np.isin(pop_cell, treat_cells_true))) < 1e-9
 print("web/public/targeting.json reproduces this notebook's truth and repeated experiments")
+
+# %% [markdown]
+# ## Further reading
+#
+# Heterogeneous effects, causal forests, and choosing who gets a treatment. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+#
+# Theory notes in this project: [hte](../docs/theory/hte.md), [causal-forests](../docs/theory/causal-forests.md), [policy-learning](../docs/theory/policy-learning.md), [metalearners](../docs/theory/metalearners.md), [dml](../docs/theory/dml.md).
+#
+# - ★ Wager, S. (2025). *Causal Inference: A Statistical Learning Approach* (book draft, Nov 2025), chapters 4 (heterogeneous effects) and 5 (policy learning). The notation used here. **[Vega: 00-foundational]**
+# - ★ Wager, S., & Athey, S. (2018). Estimation and inference of heterogeneous treatment effects using random forests. *JASA* 113(523). Causal forests and honest trees. **[online]** https://doi.org/10.1080/01621459.2017.1319839
+# - ★ Athey, S., Tibshirani, J., & Wager, S. (2019). Generalized random forests. *Annals of Statistics* 47(2). The forest econml implements. **[Vega: 11-hte-metalearners-forests]**
+# - Nie, X., & Wager, S. (2021). Quasi-oracle estimation of heterogeneous treatment effects. *Biometrika* 108(2). The R-learner. **[online]** https://doi.org/10.1093/biomet/asaa076
+# - Künzel, S. R., Sekhon, J. S., Bickel, P. J., & Yu, B. (2019). Metalearners for estimating heterogeneous treatment effects using machine learning. *PNAS* 116(10). S-, T- and X-learners, for comparison. **[Vega: 11-hte-metalearners-forests]**
+# - Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018). Double/debiased machine learning for treatment and structural parameters. *The Econometrics Journal* 21(1). Cross-fitting and orthogonal scores. **[Vega: 01-causal-ml-dml]**
+# - Ahrens, A., Chernozhukov, V., Hansen, C., Kozbur, D., Schaffer, M., & Wiemann, T. (2025). An introduction to double/debiased machine learning. arXiv:2504.08324. The gentle version of the above. **[Vega: 01-causal-ml-dml]**
+# - Chernozhukov, V., Demirer, M., Duflo, E., & Fernández-Val, I. (2018). Generic machine learning inference on heterogeneous treatment effects in randomized experiments. NBER WP 24678. The calibration (BLP) test. **[online]** https://doi.org/10.3386/w24678
+# - Yadlowsky, S., Fleming, S., Shah, N., Brunskill, E., & Wager, S. (2025). Evaluating treatment prioritization rules via rank-weighted average treatment effects. *JASA*. The targeting (TOC) curve. **[online]** https://arxiv.org/abs/2111.07966
+# - Athey, S., & Wager, S. (2021). Policy learning with observational data. *Econometrica* 89(1). Learning who to treat. **[online]** https://doi.org/10.3982/ECTA15732
+# - Kitagawa, T., & Tetenov, A. (2018). Who should be treated? Empirical welfare maximization methods for treatment choice. *Econometrica* 86(2). **[online]** https://doi.org/10.3982/ECTA13288
+# - Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V. (2024). *Applied Causal Inference Powered by ML and AI*. The applied book, with code. **[Vega: 00-foundational]**
+# - Spotify Engineering. *Experimenting with Machine Learning to Target In-App Messaging* (blog). Targeting in an industry setting. **[Vega: 08-personalization-and-platform-craft]**
+# - grf guide (grf-labs.github.io/grf). The practical causal-forest guide: doubly robust scores, BLP, RATE. **[online]** https://grf-labs.github.io/grf/articles/grf_guide.html

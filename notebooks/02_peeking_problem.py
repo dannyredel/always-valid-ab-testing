@@ -5,6 +5,8 @@
 #     text_representation:
 #       extension: .py
 #       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.6
 #   kernelspec:
 #     display_name: Python (ablab)
 #     language: python
@@ -329,3 +331,18 @@ from ablab.stats import diff_in_proportions  # noqa: E402
 d_prod, se_prod, z_prod = diff_in_proportions(s_t, n_t, s_c, n_c)
 assert np.allclose(z_prod, Z) and np.allclose(se_prod, SE) and np.allclose(d_prod, D)
 print("ablab.stats reproduces this notebook on all", Z.size, "experiment-looks")
+
+# %% [markdown]
+# ## Further reading
+#
+# Why checking the usual interval at every update inflates false alarms. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+#
+# Theory notes in this project: [anytime-valid](../docs/theory/anytime-valid.md), [sequential-chapter](../docs/theory/sequential-chapter.md).
+#
+# - ★ Johari, R., Koomen, P., Pekelis, L., & Walsh, D. (2017). Peeking at A/B tests: why it matters, and what to do about it. *KDD 2017*. The paper that made peeking a household word in industry. **[Vega: 04-sequential-anytime-valid]** (journal version: *Operations Research* 70(3), 2022, https://doi.org/10.1287/opre.2021.2135)
+# - ★ Miller, E. *How Not To Run an A/B Test* (blog). The classic short explanation, with simulations. **[Vega: 04-sequential-anytime-valid]**
+# - Armitage, P., McPherson, C. K., & Rowe, B. C. (1969). Repeated significance tests on accumulating data. *JRSS-A* 132(2). The original result, from clinical trials. **[online]** https://doi.org/10.2307/2343787
+# - Etsy Engineering. *How Etsy Handles Peeking in A/B Testing* (blog). How a company actually deals with it. **[Vega: 04-sequential-anytime-valid]**
+# - Spotify Engineering. *Bringing Sequential Testing to Experiments with Longitudinal Data, Part 1: The Peeking Problem 2.0* (blog). Peeking when the same users are measured repeatedly. **[Vega: 04-sequential-anytime-valid]**
+# - Deng, A., Lu, J., & Chen, S. (2016). Continuous monitoring of A/B tests without pain: optional stopping in Bayesian testing. arXiv:1602.05549. Whether Bayesian tests escape the problem. **[Vega: 04-sequential-anytime-valid]**
+# - Robinson, D. *Is Bayesian A/B Testing Immune to Peeking? Not Exactly* (Variance Explained blog). The short answer to the above. **[Vega: 04-sequential-anytime-valid]**

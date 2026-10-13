@@ -5,6 +5,8 @@
 #     text_representation:
 #       extension: .py
 #       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.6
 #   kernelspec:
 #     display_name: Python (ablab)
 #     language: python
@@ -409,3 +411,18 @@ assert abs(prod.break_even_lift(p_c, q, b, V) - BREAK_EVEN) < 1e-12
 assert abs(prod.fixed_horizon_n(p_c, BREAK_EVEN, variance_factor=F_ADJ) - N_FIXED["CUPAC-adjusted"]) < 1
 assert toml["plan"]["max_players"] == N_PLAN == toml["plan"]["n_star"]
 print(f"ablab.power reproduces this notebook; config max_players = n_star = {N_PLAN:,}")
+
+# %% [markdown]
+# ## Further reading
+#
+# How many players to plan for, when the test is checked continuously and the decision is economic. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+#
+# Theory notes in this project: [power-mde](../docs/theory/power-mde.md).
+#
+# - ★ Kohavi, R., Linowski, J., Vermeer, L., Boisseranc, F., Furuseth, J., Gelman, A., Imbens, G., & Rajagopal, R. (2026). Power analysis is essential: high-powered tests suggest minimal to no effect of rounded shapes on click-through rates. *Econ Journal Watch* 23(1). Why underpowered A/B tests mislead. **[Vega: 05-power-and-decisions]**
+# - ★ Gelman, A., & Carlin, J. (2014). Beyond power calculations: assessing Type S (sign) and Type M (magnitude) errors. *Perspectives on Psychological Science* 9(6). Why a significant result from a small test exaggerates the effect. **[Vega: 05-power-and-decisions]**
+# - Nordin, M., & Schultzberg, M. (2024). Precision-based designs for sequential randomized experiments. arXiv:2405.03487. Stopping at a target precision. **[Vega: 04-sequential-anytime-valid]**
+# - Spotify Engineering. *Fixed-Power Designs: It's Not IF You Peek, It's WHAT You Peek At* (blog). The blog version of the above. **[Vega: 04-sequential-anytime-valid]**
+# - Feit, E. M., & Berman, R. (2019). Test & roll: profit-maximizing A/B tests. *Marketing Science* 38(6). Sample size from profit, not significance; close to this project's break-even. **[Vega: 05-power-and-decisions]**
+# - Maharaj, A. V., et al. (2023). Anytime-valid confidence sequences in an enterprise A/B testing platform. Section on sample-size planning for confidence sequences. **[local]** `2302.10108v1.pdf`
+# - Schultzberg, M. *What Makes a Good Sample Size Calculator?* (Confidence blog). Everything that changes the required N. **[Vega: 05-power-and-decisions]** (see `confidence-ssc/`)

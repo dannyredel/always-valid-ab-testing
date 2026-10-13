@@ -5,6 +5,8 @@
 #     text_representation:
 #       extension: .py
 #       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.6
 #   kernelspec:
 #     display_name: Python (ablab)
 #     language: python
@@ -447,3 +449,18 @@ half_nb = se_nb * cs_multiplier(tot["n_t"] + tot["n_c"], rho2_for(PLAN["n_star"]
 lo_p, hi_p = prod.segment_interval(tot["s_t"], tot["n_t"], tot["s_c"], tot["n_c"], seg_share, K, ALPHA, PLAN["n_star"])
 assert np.allclose(lo_p, p_t - p_c - half_nb) and np.allclose(hi_p, p_t - p_c + half_nb)
 print("ablab.segments reproduces this notebook (levels, shares, widened intervals)")
+
+# %% [markdown]
+# ## Further reading
+#
+# Checks that keep a running test trustworthy: the split, balance, and harm in segments. Where to find them: **[local]** = `docs/papers/` in this project (kept out of the repo) · **[Vega: folder]** = `Vega/paper-library/pdfs/<folder>/` (Vega's library also has text versions in `paper-library/md/` and notes in `paper-library/papers/`) · **[online]** = not in either library yet. ★ = read first.
+#
+# Theory notes in this project: [anytime-valid](../docs/theory/anytime-valid.md), [balancing](../docs/theory/balancing.md).
+#
+# - ★ Fabijan, A., Gupchup, J., Gupta, S., Omhover, J., Qin, W., Vermeer, L., & Dmitriev, P. (2019). Diagnosing sample ratio mismatch in online controlled experiments: a taxonomy and rules of thumb for practitioners. *KDD 2019*. What causes a broken split. **[online]** https://doi.org/10.1145/3292500.3330722
+# - ★ Lindon, M., & Malek, A. (2022). Anytime-valid inference for multinomial count data. *NeurIPS 2022*. The always-valid split check used here. **[online]** https://arxiv.org/abs/2011.03567
+# - Nie, K., Zhang, Z., et al. (2022). Ensure A/B test quality at scale with automated randomization validation and sample ratio mismatch detection. *CIKM 2022* (eBay). Sequential split checks in production. **[Vega: 05-power-and-decisions]**
+# - Schultzberg, M., Ankargren, S., & Frånberg, M. (2024). Risk-aware product decisions in A/B tests with multiple metrics. arXiv:2402.11609. Guardrails and corrections when many metrics are watched. **[Vega: 05-power-and-decisions]**
+# - Schultzberg, M. *Are Optimal Multiple Testing Corrections Optimal for You?* (Confidence blog). Why Bonferroni-style widening is often the right call. **[Vega: 05-power-and-decisions]**
+# - Austin, P. C. (2009). Balance diagnostics for comparing the distribution of baseline covariates between treatment groups in propensity-score matched samples. *Statistics in Medicine* 28(25). The standardised-difference rule of thumb. **[online]** https://doi.org/10.1002/sim.3697
+# - Imbens, G. W. (2014). Matching methods in practice. Balance measures from the causal-inference side. **[Vega: 00-foundational]**
