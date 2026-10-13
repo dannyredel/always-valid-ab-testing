@@ -3,6 +3,7 @@
   import AdjustPanel from './lib/components/AdjustPanel.svelte';
   import AfterSection from './lib/components/AfterSection.svelte';
   import BeforeSection from './lib/components/BeforeSection.svelte';
+  import ReferencesSection from './lib/components/ReferencesSection.svelte';
   import Details from './lib/components/Details.svelte';
   import HowSure from './lib/components/HowSure.svelte';
   import Experiences from './lib/components/Experiences.svelte';
@@ -34,11 +35,11 @@
   let showDetails = $state(q.get('details') === '1');
   let storyOf: Player | null = $state(null);
 
-  // Sections: Before / Live / After, as a bare #anchor so a link can open any of them.
-  type Section = 'before' | 'live' | 'after';
+  // Sections: Before / Live / After (tabs) and References (footer link), as a bare #anchor so a link can open any of them.
+  type Section = 'before' | 'live' | 'after' | 'references';
   const readSection = (): Section => {
     const h = location.hash.slice(1);
-    return h === 'before' || h === 'after' ? h : 'live';
+    return h === 'before' || h === 'after' || h === 'references' ? h : 'live';
   };
   let section = $state<Section>(readSection());
   $effect(() => {
@@ -183,6 +184,8 @@
 
   {#if section === 'before'}
     <BeforeSection />
+  {:else if section === 'references'}
+    <ReferencesSection />
   {:else if section === 'after'}
     <AfterSection {cfg} look={view.look} verdict={view.verdict} done={view.done} clock={view.clock} n={view.n}
       srmP={view.srmP} control={view.control} treatment={view.treatment} segments={view.segments} onfinish={skipToEnd} />
@@ -274,7 +277,9 @@
   {/if}
 
   <footer class="foot">
-    <p>Questline is fictional and every player is simulated. Run {seed}: share this page's link to replay it exactly.</p>
+    <p>Questline is fictional and every player is simulated. Run {seed}: share this page's link to replay it exactly.
+      </p>
+    <p class="foot-links"><a href="#references">References</a><a href="https://github.com/dannyredel/always-valid-ab-testing">Source code</a></p>
     <div class="foot-controls">
       <span class="phone-only">{@render source()}</span>
       <div class="seg small" role="group" aria-label="Theme">
@@ -402,4 +407,7 @@
   .foot { border-top: 1px solid var(--line); padding-block: 16px 32px; font-size: 12.5px; color: var(--faint);
     display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: center; }
   .foot p { margin: 0; max-width: 60ch; }
+  .foot-links { display: flex; gap: 16px; margin-top: 8px; }
+  .foot-links a { color: var(--muted); text-underline-offset: 3px; }
+  .foot-links a:hover { color: var(--ink); }
 </style>

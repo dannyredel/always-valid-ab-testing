@@ -2,6 +2,13 @@
 
 Newest first. One entry per working session: what was done, how it was checked, what deviated from the brief.
 
+## 2026-10-13 — On GitHub; references section
+
+- Repo named **Always-Valid A/B Testing** (`dannyredel/always-valid-ab-testing`, public); the website keeps "Live A/B Lab" until Daniel picks a fun name (BACKLOG 'Open'). Live at https://dannyredel.github.io/always-valid-ab-testing/ (deployed by the Actions workflow after `npm test` and `svelte-check`).
+- Kept out of the repo: `docs/papers/` (third-party PDFs; cited by link instead), `.env*`, logs. `.gitattributes` pins LF.
+- **First deploy failed:** the stale-precompute check hashed `config/cupac.json` byte for byte, and the file had CRLF on Windows (written in text mode) but LF in the repo. Fixed: the hash normalises line endings; `train_cupac.py` writes LF. Precomputed runs regenerated: identical, only the hash changed. Second deploy green; live page checked by screenshot.
+- **References** (`#references`, linked from the footer next to 'Source code'): 28 works in five groups (online experiments; peeking and always-valid inference; variance reduction; heterogeneous effects and targeting; software), each with what it is used for here. Data in `web/src/lib/references.ts`. Every DOI checked against doi.org (title matches), every arXiv id against arxiv.org. The two DoorDash switchback papers in `docs/papers/` are not cited (not used here).
+
 ## 2026-10-12 — M10 (part 4): 'Ship it to whom?' on the page (milestone 10 complete, stop for review)
 
 - Daniel approved notebook 08 and the proposed headline (lead with the economics, show the forest and its tests as they are).
