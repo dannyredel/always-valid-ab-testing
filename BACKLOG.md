@@ -87,6 +87,7 @@ Built notebook-first (see `notebooks/README.md`): notebooks 01–04, reviewed, t
 - [x] 'Ship it to whom?' page section from notebook 08 (`scripts/targeting_page.py` → `targeting.json` → `TargetingSection.svelte`)
 
 ## Open
+- [ ] **GST vs always-valid comparison** (Daniel liked it, 2026-10-13; later, after his paper reading): simulate an O'Brien–Fleming / Lan–DeMets group-sequential test with ~14 daily looks on the same Small-preset world and compare players-to-decision, power and false alarms with the page's always-valid interval. Home: notebook 03 or 04; material for article 2's "when *not* to use this" section. Context: Spotify's *Choosing a Sequential Testing Framework* (GST for batch / estimable N, AVI for streaming / unknown N); in mobile gaming, primary metrics mature in daily install cohorts (GST-like) while guardrails need continuous monitoring (AVI-like).
 - [ ] Website name: something fun (repo is "Always-Valid A/B Testing"; page still says "Live A/B Lab"). Daniel to decide.
 
 ## Ideas parking lot (not in scope unless Daniel says so)
