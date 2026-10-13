@@ -1,0 +1,57 @@
+[project]
+name = "ablab"
+version = "0.1.0"
+description = "Reference statistics engine for Live A/B Lab"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "mmh3>=4",
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "jupyterlab>=4",
+    "jupytext>=1.16",
+    "matplotlib>=3.8",
+    "pandas>=2.1",
+    "ipywidgets>=8",
+    "seaborn>=0.13",
+    "statsmodels>=0.14",
+    "causalml>=0.15",
+    "scikit-learn>=1.4",
+]
+article = [
+    "doubleml>=0.11",
+    "econml>=0.15",
+    "scikit-learn>=1.4",
+]
+personas = [
+    "anthropic>=0.40",
+]
+dev = [
+    "pytest>=8",
+    "ruff>=0.5",
+    "statsmodels>=0.14",
+]
+# gbstats (GrowthBook's stats engine) is the reference for our confidence sequence. It pins pandas<2,
+# so install it separately: uv pip install --python .venv --no-deps gbstats pydantic
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["ablab*"]
+
+[tool.setuptools.package-data]
+ablab = ["*.mplstyle"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.jupytext]
+formats = "ipynb,py:percent"

@@ -1,0 +1,60 @@
+/* Tokens from docs/design.md. One accent: coin gold = the Starter Bonus.
+   Themes: system by default; the footer toggle sets data-theme="light" | "dark" on <html>.
+   Contrast checked against WCAG AA (scripts in LOG.md, 2026-10-12): text >= 4.5:1, graphics >= 3:1. */
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --ink: #15181e;
+  --muted: #5b6270;
+  --faint: #6b717c;
+  --line: #e2e5ea;
+  --line-strong: #c9ced6;
+  --border: #828994;       /* outlines of controls */
+  --control: #4a5260;
+  --gold: #d99a0b;         /* fills: bands, chips, filled dots */
+  --gold-line: #b07c00;    /* strokes: estimate line, dot outlines (3:1 on the page) */
+  --gold-ink: #8a5f00;
+  --gold-wash: #fdf3dc;
+  --ship: #1f8a4c;
+  --stop: #c2362f;
+  --phone-bezel: #1d2027;
+  --phone-screen: #fbfbfc;
+  --shadow: rgba(10, 12, 16, 0.28);
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Geist", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1114; --surface: #171a1f; --ink: #eceef2; --muted: #a2a8b3; --faint: #868d97;
+    --line: #262a31; --line-strong: #363b44; --border: #646b76; --control: #b9bfca;
+    --gold: #f0b52c; --gold-line: #f0b52c; --gold-ink: #f3c25a; --gold-wash: #2a2210;
+    --ship: #4cc27f; --stop: #ff6b61; --phone-bezel: #050607; --phone-screen: #1b1e24; --shadow: rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1114; --surface: #171a1f; --ink: #eceef2; --muted: #a2a8b3; --faint: #868d97;
+  --line: #262a31; --line-strong: #363b44; --border: #646b76; --control: #b9bfca;
+  --gold: #f0b52c; --gold-line: #f0b52c; --gold-ink: #f3c25a; --gold-wash: #2a2210;
+  --ship: #4cc27f; --stop: #ff6b61; --phone-bezel: #050607; --phone-screen: #1b1e24; --shadow: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+}
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold-line); outline-offset: 2px; border-radius: 4px; }
+.num { font-variant-numeric: tabular-nums; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

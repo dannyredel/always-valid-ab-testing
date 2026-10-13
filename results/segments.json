@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-12",
+  "seed": 20261021,
+  "runs": 2000,
+  "segments": [
+    "Country tier: Tier 1",
+    "Country tier: Tier 2",
+    "Country tier: Tier 3",
+    "Device: iPhone",
+    "Device: Android",
+    "Channel: Organic",
+    "Channel: Paid social",
+    "Channel: Referral"
+  ],
+  "familywise_coverage_small": {
+    "rate": 0.99,
+    "ci_low": 0.9846040615409247,
+    "ci_high": 0.9935172321234472
+  },
+  "harm_scenario": {
+    "tier1_true_lift": -0.023999999999999997,
+    "detected_by_max": {
+      "rate": 0.2185,
+      "ci_low": 0.2009387675817283,
+      "ci_high": 0.23714053003761704
+    },
+    "unharmed_falsely_flagged": {
+      "rate": 0.0005,
+      "ci_low": 8.826773070546765e-05,
+      "ci_high": 0.0028268625032662146
+    }
+  },
+  "all_passed": true
+}

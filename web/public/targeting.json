@@ -1,0 +1,190 @@
+{
+ "preset_lift": 0.02,
+ "planned_players": 30000,
+ "economics": {
+  "value_per_activation_usd": 2.5,
+  "extra_cost_usd": 0.18
+ },
+ "truth": {
+  "cells": [
+   {
+    "tier": "Tier 1",
+    "channel": "Organic",
+    "share": 0.13486594217268869,
+    "lift": 0.009745203532636281,
+    "baseline": 0.28345713134712597,
+    "value_cents": -2.84134114467665
+   },
+   {
+    "tier": "Tier 1",
+    "channel": "Paid social",
+    "share": 0.12104866537103876,
+    "lift": 0.015226880519744189,
+    "baseline": 0.20816694385638027,
+    "value_cents": -0.214368708834193
+   },
+   {
+    "tier": "Tier 1",
+    "channel": "Referral",
+    "share": 0.045308967596081384,
+    "lift": 0.00974520353263628,
+    "baseline": 0.3232763565237518,
+    "value_cents": -3.5580871978559157
+   },
+   {
+    "tier": "Tier 2",
+    "channel": "Organic",
+    "share": 0.2014139531194225,
+    "lift": 0.016242005887727135,
+    "baseline": 0.2418475905487179,
+    "value_cents": -0.5851112639242272
+   },
+   {
+    "tier": "Tier 2",
+    "channel": "Paid social",
+    "share": 0.18019474080831316,
+    "lift": 0.02537813419957365,
+    "baseline": 0.1734148991290304,
+    "value_cents": 2.766258949978539
+   },
+   {
+    "tier": "Tier 2",
+    "channel": "Referral",
+    "share": 0.06694463173759568,
+    "lift": 0.016242005887727135,
+    "baseline": 0.2771156327430138,
+    "value_cents": -1.2199360234215528
+   },
+   {
+    "tier": "Tier 3",
+    "channel": "Organic",
+    "share": 0.11274937532225439,
+    "lift": 0.024363008831590705,
+    "baseline": 0.1916170208812572,
+    "value_cents": 2.2031116730664135
+   },
+   {
+    "tier": "Tier 3",
+    "channel": "Paid social",
+    "share": 0.09983441081981517,
+    "lift": 0.03806720129936047,
+    "baseline": 0.13466865190036312,
+    "value_cents": 6.407554967245091
+   },
+   {
+    "tier": "Tier 3",
+    "channel": "Referral",
+    "share": 0.037639313052790224,
+    "lift": 0.024363008831590708,
+    "baseline": 0.2251716015250263,
+    "value_cents": 1.59912922147857
+   }
+  ],
+  "everyone_cents": 0.6768691850557719,
+  "best_by_cell_cents": 1.4467493797330546,
+  "best_possible_cents": 2.0501000920132686,
+  "baseline_cutoff": 0.2577777777777778,
+  "baseline_rule_share": 0.6568486495062071
+ },
+ "sizes": [
+  {
+   "players": 15000,
+   "experiments": 25,
+   "rules": {
+    "everyone": {
+     "mean": 0.6768691850557719,
+     "q10": 0.6768691850557719,
+     "q90": 0.6768691850557719
+    },
+    "subgroups": {
+     "mean": 0.8335277352994298,
+     "q10": 0.21509957956598885,
+     "q90": 1.2806631122578063
+    },
+    "baseline_rule": {
+     "mean": 1.3641972237309152,
+     "q10": 0.9407034967241462,
+     "q90": 1.6924258037222635
+    },
+    "forest": {
+     "mean": 0.9785149053178648,
+     "q10": 0.6512578566885522,
+     "q90": 1.2468825812903537
+    }
+   },
+   "baseline_rule_share": 0.5660254630547733,
+   "forest_share": 0.543090667512791,
+   "forest_beats_subgroups": 0.76,
+   "forest_beats_baseline_rule": 0.2,
+   "heterogeneity_found_test": 0.2,
+   "heterogeneity_found_forest": 0.08,
+   "forest_calibration_slope": 0.07159984600992923
+  },
+  {
+   "players": 30000,
+   "experiments": 25,
+   "rules": {
+    "everyone": {
+     "mean": 0.6768691850557719,
+     "q10": 0.6768691850557719,
+     "q90": 0.6768691850557719
+    },
+    "subgroups": {
+     "mean": 1.0055480255795615,
+     "q10": 0.67267545072953,
+     "q90": 1.407103901920401
+    },
+    "baseline_rule": {
+     "mean": 1.5846343227069084,
+     "q10": 1.39513579993879,
+     "q90": 1.7009692711798545
+    },
+    "forest": {
+     "mean": 1.0858528281627156,
+     "q10": 0.7814889357166358,
+     "q90": 1.3542596556022894
+    }
+   },
+   "baseline_rule_share": 0.6117673422440804,
+   "forest_share": 0.548330424780867,
+   "forest_beats_subgroups": 0.48,
+   "forest_beats_baseline_rule": 0.0,
+   "heterogeneity_found_test": 0.28,
+   "heterogeneity_found_forest": 0.08,
+   "forest_calibration_slope": 0.09280911120358175
+  },
+  {
+   "players": 100000,
+   "experiments": 25,
+   "rules": {
+    "everyone": {
+     "mean": 0.6768691850557719,
+     "q10": 0.6768691850557719,
+     "q90": 0.6768691850557719
+    },
+    "subgroups": {
+     "mean": 1.1912024197395008,
+     "q10": 0.9048895423218041,
+     "q90": 1.407103901920401
+    },
+    "baseline_rule": {
+     "mean": 1.6792982990271108,
+     "q10": 1.6544469429820157,
+     "q90": 1.702101455269416
+    },
+    "forest": {
+     "mean": 1.3191095643067456,
+     "q10": 1.1621506682668439,
+     "q90": 1.4490628635888272
+    }
+   },
+   "baseline_rule_share": 0.6600852734700352,
+   "forest_share": 0.5712100900329194,
+   "forest_beats_subgroups": 0.6,
+   "forest_beats_baseline_rule": 0.0,
+   "heterogeneity_found_test": 0.64,
+   "heterogeneity_found_forest": 0.2,
+   "forest_calibration_slope": 0.1306252415572381
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+# LF everywhere: the precomputed runs hash config/simulator.toml + config/cupac.json byte for byte
+* text=auto eol=lf
+*.png binary
+*.pdf binary
+*.jpg binary
+*.webp binary

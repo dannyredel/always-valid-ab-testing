@@ -1,0 +1,36 @@
+# Live A/B Lab figure style. Colours match docs/design.md (light theme).
+font.family: sans-serif
+font.sans-serif: Geist, Inter, Segoe UI, DejaVu Sans
+font.size: 10.5
+axes.titlesize: 12
+axes.titleweight: semibold
+axes.titlelocation: left
+axes.titlepad: 12
+axes.labelsize: 10
+axes.labelcolor: 5b6270
+axes.edgecolor: c9ced6
+axes.linewidth: 0.8
+axes.spines.top: False
+axes.spines.right: False
+axes.grid: True
+axes.grid.axis: y
+axes.axisbelow: True
+axes.prop_cycle: cycler('color', ['4a5260', 'd99a0b', '1f8a4c', 'c2362f', '8a909b'])
+grid.color: e2e5ea
+grid.linewidth: 0.8
+xtick.color: 5b6270
+ytick.color: 5b6270
+xtick.major.size: 0
+ytick.major.size: 0
+text.color: 15181e
+legend.frameon: False
+legend.fontsize: 9.5
+figure.facecolor: f5f6f8
+axes.facecolor: f5f6f8
+savefig.facecolor: f5f6f8
+figure.figsize: 8, 4.2
+figure.dpi: 110
+savefig.dpi: 200
+savefig.bbox: tight
+lines.linewidth: 2
+lines.solid_capstyle: round

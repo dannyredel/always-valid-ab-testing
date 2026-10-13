@@ -1,0 +1,102 @@
+# Live A/B Lab: the simulated world, the test plan and the page timing.
+# One file read by Python (ablab.config) and, from M2, by the browser.
+# Sources: notebook 01 (world), notebook 04 (plan), DECISIONS.md (page).
+
+[experiment]
+key = "starter-bonus-v1"   # hashed with the player ID for assignment
+days = 14
+baseline_rate = 0.22       # target average activation, control arm
+
+[arrivals]
+per_hour = 300                                            # average sign-ups per hour
+weekday_shape = [0.90, 0.88, 0.92, 0.97, 1.08, 1.17, 1.10]  # Mon..Sun, normalised to mean 1 in code
+
+# Hour-of-day shape (normalised to mean 1 in code):
+#   night_weight * (night_level + night_amp * cos(2*pi*(h - night_peak_hour)/24))
+#   + sum of bumps  height * exp(-((h - centre)/width)^2)
+[arrivals.hour_shape]
+night_weight = 0.25
+night_level = 0.55
+night_amp = 0.45
+night_peak_hour = 16
+bumps = [[0.45, 12.5, 2.2], [1.0, 20.5, 2.6]]  # [height, centre, width]: lunchtime, evening
+
+[covariates]
+evening_hours = [18, 24]  # [start, end) counted as evening
+
+[covariates.tier]
+levels = ["Tier 1", "Tier 2", "Tier 3"]
+p = [0.30, 0.45, 0.25]
+
+[covariates.device]
+levels = ["iPhone", "Android"]
+p_iphone_by_tier = [0.60, 0.35, 0.20]
+
+[covariates.channel]
+levels = ["Organic", "Paid social", "Referral"]
+p = [0.45, 0.40, 0.15]
+
+# Effects on the log-odds of activating in the control arm.
+[baseline_logit]
+tier = [0.25, 0.0, -0.35]
+device = [0.10, 0.0]
+channel = [0.20, -0.30, 0.45]
+evening = 0.15
+engagement = 1.2  # beta_U, latent engagement U ~ N(0, 1)
+
+# Signals known before sign-up: noisy views of engagement U.
+[signals.games_30d]          # Poisson(exp(log_mean + loading * U))
+log_mean = 0.9
+loading = 0.6
+
+[signals.click_to_install_s] # exp(log_median - loading * U + N(0, noise_sd))
+log_median = 4.094           # median 60 s
+loading = 0.45
+noise_sd = 0.8
+
+[signals.partner_score]      # sigmoid(loading * U + N(0, noise_sd)), only for this channel
+loading = 1.1
+noise_sd = 0.8
+channel = "Paid social"
+
+# How the Starter Bonus lift varies by segment; normalised so the average lift equals the preset.
+[lift_multiplier]
+tier = [0.6, 1.0, 1.5]
+channel = [0.8, 1.25, 0.8]
+
+[presets]
+names = ["No effect", "Small real effect", "Large effect"]
+lifts = [0.0, 0.02, 0.05]
+default = "Small real effect"
+
+[journey]  # player story only; never used by the analysis
+p_start_if_not_activated = 0.55
+start_median_min = 18
+start_sigma = 1.0
+milestone_median_h = 5.0
+milestone_sigma = 1.1
+treatment_speedup = 0.85
+p_late_finisher = 0.15
+
+# Fixed once on a 400,000-player reference population (ablab.simulator.calibrate, seed 1).
+# tests/test_simulator.py checks these still match the world above.
+[calibration]
+intercept = -1.7804
+multiplier_mean = 0.9851
+
+[plan]  # notebook 04
+alpha = 0.05
+power = 0.80
+bonus_usd = 0.40
+p_reach_level10 = 0.55
+value_per_activation_usd = 2.50
+cupac_r2 = 0.126
+outcome_delay_h = 72
+min_players = 1000
+max_players = 30000  # 80% power at the break-even lift, CUPAC-adjusted
+n_star = 30000       # tuning of the confidence sequence = max_players
+
+[page]  # DECISIONS.md, 2026-10-12
+start_hour = 80                  # day 4, 08:00: the morning's first outcomes are arriving
+hours_per_update = 1.75       # experiment time per automatic update (tick)
+seconds_per_update = [2.0, 3.0] # real time between updates, uniform jitter

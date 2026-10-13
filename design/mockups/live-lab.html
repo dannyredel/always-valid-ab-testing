@@ -1,0 +1,625 @@
+<title>Live A/B Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Layout: two halves on laptop (players left, analyst right), verdict first on phone. One accent: coin gold = the Starter Bonus. */
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --ink: #15181e;
+  --muted: #5b6270;
+  --faint: #8a909b;
+  --line: #e2e5ea;
+  --line-strong: #c9ced6;
+  --control: #4a5260;          /* control arm: neutral ink */
+  --gold: #d99a0b;             /* accent: Starter Bonus, coins */
+  --gold-ink: #8a5f00;         /* gold when used as text */
+  --gold-wash: #fdf3dc;
+  --ship: #1f8a4c;
+  --stop: #c2362f;
+  --phone-bezel: #1d2027;
+  --phone-screen: #fbfbfc;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Geist", "Segoe UI", system-ui, sans-serif;
+  --r-sm: 8px; --r-md: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1114; --surface: #171a1f; --ink: #eceef2; --muted: #a2a8b3; --faint: #727986;
+    --line: #262a31; --line-strong: #363b44; --control: #b9bfca; --gold: #f0b52c; --gold-ink: #f3c25a;
+    --gold-wash: #2a2210; --ship: #4cc27f; --stop: #ff6b61; --phone-bezel: #050607; --phone-screen: #1b1e24;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1114; --surface: #171a1f; --ink: #eceef2; --muted: #a2a8b3; --faint: #727986;
+  --line: #262a31; --line-strong: #363b44; --control: #b9bfca; --gold: #f0b52c; --gold-ink: #f3c25a;
+  --gold-wash: #2a2210; --ship: #4cc27f; --stop: #ff6b61; --phone-bezel: #050607; --phone-screen: #1b1e24;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font-body); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* mockup ribbon (not product UI) */
+.ribbon { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between;
+  padding: 8px 16px; font-size: 12.5px; color: var(--muted); border-bottom: 1px dashed var(--line-strong); }
+.ribbon-tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ribbon button { border: 1px solid var(--line-strong); background: transparent; border-radius: 999px; padding: 2px 10px; cursor: pointer; font-size: 12px; }
+.ribbon button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 24px; }
+@media (max-width: 640px) { .wrap { padding-inline: 16px; } }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; padding-block: 20px 8px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 28px; height: 28px; }
+.brand h1 { font: 600 16px/1.2 var(--font-body); margin: 0; }
+.brand p { margin: 0; font-size: 13px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.seg button { border: 0; background: transparent; padding: 5px 12px; border-radius: 999px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.play { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); display: grid; place-items: center; cursor: pointer; }
+.play svg { width: 14px; height: 14px; fill: currentColor; }
+
+.tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--line); margin-top: 8px; }
+.tabs a { padding: 10px 0; font-size: 14px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs a[aria-current="page"] { color: var(--ink); border-color: var(--ink); font-weight: 500; }
+
+.story { margin: 20px 0 0; max-width: 68ch; color: var(--muted); font-size: 14.5px; }
+.story strong { color: var(--ink); font-weight: 600; }
+
+/* main grid */
+.main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 48px; padding-block: 28px 64px; align-items: start; }
+@media (max-width: 920px) {
+  .main { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .analyst { order: -1; }
+}
+.half-title { font: 500 13px/1.3 var(--font-body); color: var(--muted); margin: 0 0 14px; }
+
+/* phones */
+.experiences { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.exp figcaption { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; margin-bottom: 10px; }
+.swatch { width: 10px; height: 10px; border-radius: 50%; background: var(--control); flex: none; }
+.swatch.t { background: var(--gold); }
+.exp figure { margin: 0; }
+.phone { background: var(--phone-bezel); border-radius: 30px; padding: 7px; max-width: 232px; aspect-ratio: 9 / 17.5; }
+.screen { background: var(--phone-screen); border-radius: 24px; height: 100%; overflow: hidden; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; font-size: 11px; line-height: 1.35; }
+.app-bar { display: flex; justify-content: space-between; align-items: center; }
+.app-bar b { font: 700 13px var(--font-display); letter-spacing: -0.01em; }
+.balance { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; background: var(--surface); border: 1px solid var(--line); padding: 2px 7px 2px 4px; border-radius: 999px; }
+.coin { width: 12px; height: 12px; flex: none; }
+.game { display: flex; gap: 9px; align-items: center; }
+.game svg { width: 42px; height: 42px; border-radius: 11px; flex: none; }
+.game b { display: block; font-size: 12.5px; }
+.game span { color: var(--muted); font-size: 10.5px; }
+.ms-title { font-weight: 600; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.ms { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ms li { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 7px 8px; }
+.ms li small { grid-column: 1 / -1; color: var(--muted); font-size: 9.5px; }
+.ms .reward { display: inline-flex; align-items: center; gap: 3px; font-weight: 600; }
+.ms li.bonus { background: var(--gold-wash); border-color: var(--gold); }
+.ms li.bonus small { color: var(--gold-ink); font-weight: 600; }
+.ms li.locked small { display: inline-flex; gap: 4px; align-items: center; }
+.cta { margin-top: auto; text-align: center; background: var(--ink); color: var(--bg); border-radius: 10px; padding: 8px; font-weight: 600; font-size: 11.5px; }
+.diff-note { grid-column: 1 / -1; font-size: 13px; color: var(--muted); margin: 4px 0 0; max-width: 60ch; }
+.diff-note mark { background: var(--gold-wash); color: var(--gold-ink); padding: 0 4px; border-radius: 4px; }
+
+/* lanes */
+.lanes { margin-top: 36px; display: flex; flex-direction: column; gap: 18px; }
+.lane-head { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; margin-bottom: 8px; }
+.lane-head span:first-child { display: inline-flex; gap: 8px; align-items: center; font-weight: 500; }
+.lane-head span:last-child { color: var(--muted); }
+.dots { display: flex; flex-wrap: wrap; gap: 5px; min-height: 58px; align-content: flex-start; }
+.dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--control); padding: 0; background: transparent; cursor: pointer; }
+.dot.on { background: var(--control); }
+.t .dot { border-color: var(--gold); }
+.t .dot.on { background: var(--gold); }
+.dot.new { animation: drop .5s ease-out; }
+@keyframes drop { from { transform: translateY(-6px) scale(.4); opacity: 0; } }
+.lanes-key { font-size: 12.5px; color: var(--faint); display: flex; gap: 16px; flex-wrap: wrap; }
+.lanes-key i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--faint); vertical-align: -1px; margin-right: 5px; }
+.lanes-key i.on { background: var(--faint); }
+
+/* analyst */
+.verdict { display: flex; align-items: center; gap: 16px; margin: 0; font: 700 clamp(40px, 6.2vw, 68px)/1 var(--font-display); letter-spacing: -0.03em; }
+.verdict-icon { width: .62em; height: .62em; flex: none; }
+.verdict[data-state="ship"] { color: var(--ship); }
+.verdict[data-state="stop"] { color: var(--stop); }
+.verdict[data-state="done"] { color: var(--muted); }
+.pulse { transform-origin: center; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+.verdict-line { font-size: 18px; line-height: 1.45; margin: 16px 0 0; max-width: 46ch; text-wrap: pretty; }
+.verdict-meta { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+
+.chart-wrap { margin-top: 32px; }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--muted); font: 11px var(--font-body); font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.lg-band { width: 18px; height: 10px; background: var(--gold); opacity: .22; border-radius: 2px; }
+.lg-line { width: 18px; height: 2px; background: var(--gold); }
+.lg-zero { width: 18px; border-top: 1.5px dashed var(--muted); }
+
+.details-btn { margin-top: 28px; display: inline-flex; gap: 8px; align-items: center; border: 1px solid var(--line-strong); background: var(--surface); border-radius: 999px; padding: 7px 14px; font-size: 13.5px; cursor: pointer; }
+.details-btn svg { width: 12px; height: 12px; transition: transform .2s; }
+.details-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+.details { margin-top: 20px; display: flex; flex-direction: column; gap: 28px; }
+.details h3 { font: 600 14px/1.3 var(--font-body); margin: 0 0 4px; }
+.details .sub { font-size: 13px; color: var(--muted); margin: 0 0 12px; max-width: 60ch; }
+.rows { border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: minmax(110px, 1.1fr) minmax(0, 2fr) 104px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.row .val { text-align: right; color: var(--muted); font-size: 12.5px; }
+.row svg { width: 100%; height: 18px; display: block; overflow: visible; }
+@media (max-width: 480px) { .row { grid-template-columns: 1fr 96px; } .row svg { grid-column: 1 / -1; grid-row: 2; } }
+.check { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; }
+.check b { color: var(--ship); font-weight: 600; }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 360px; }
+th, td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; padding-left: 0; }
+th { font-weight: 500; color: var(--muted); }
+
+/* player story */
+dialog { border: 0; padding: 0; background: var(--surface); color: var(--ink); border-radius: var(--r-md); width: min(420px, calc(100vw - 32px)); box-shadow: 0 24px 60px rgba(10, 12, 16, .28); }
+dialog::backdrop { background: rgba(10, 12, 16, .4); }
+.sheet { padding: 22px 22px 18px; }
+.sheet-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.sheet h2 { font: 700 22px/1.15 var(--font-display); margin: 0; letter-spacing: -0.01em; }
+.close { border: 0; background: transparent; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px; line-height: 1; color: var(--muted); }
+.arm-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; margin-top: 6px; }
+.profile { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; margin: 18px 0 0; font-size: 13.5px; }
+.profile dt { color: var(--muted); }
+.profile dd { margin: 0; }
+.journey { list-style: none; margin: 20px 0 0; padding: 0; position: relative; }
+.journey::before { content: ""; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 1.5px; background: var(--line-strong); }
+.journey li { position: relative; padding: 0 0 14px 26px; font-size: 13.5px; }
+.journey li::before { content: ""; position: absolute; left: 0; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line-strong); }
+.journey li.done::before { background: var(--ink); border-color: var(--ink); }
+.journey li.miss { color: var(--muted); }
+.journey time { display: block; color: var(--muted); font-size: 12px; }
+.quote { margin: 4px 0 0; padding: 12px 14px; background: var(--bg); border-radius: var(--r-sm); font-size: 13.5px; }
+.quote small { display: block; color: var(--faint); font-size: 11.5px; margin-top: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dot.new, .pulse { animation: none; }
+  .details-btn svg { transition: none; }
+}
+</style>
+
+<div class="ribbon" role="note">
+  <span>Design mockup. Numbers come from a throwaway simulation inside this page, not from the engine.</span>
+  <span class="ribbon-tools">
+    Theme
+    <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+    <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+    <button type="button" data-theme-set="system" aria-pressed="true">System</button>
+    &nbsp;Preset
+    <button type="button" data-lift="0" aria-pressed="false">No effect</button>
+    <button type="button" data-lift="0.02" aria-pressed="false">Small</button>
+    <button type="button" data-lift="0.05" aria-pressed="true">Large</button>
+  </span>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 28 28" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" fill="var(--ink)"/>
+        <path d="M8 17.5 L12 11 L15.5 15 L20 9" stroke="var(--gold)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>Live A/B Lab</h1>
+        <p>Questline Starter Bonus test</p>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="play" id="play" type="button" aria-label="Pause">
+        <svg viewBox="0 0 14 14" id="play-icon"><rect x="2" y="1" width="3.5" height="12" rx="1"/><rect x="8.5" y="1" width="3.5" height="12" rx="1"/></svg>
+      </button>
+      <div class="seg" role="group" aria-label="Speed">
+        <button type="button" data-speed="1" aria-pressed="true">1×</button>
+        <button type="button" data-speed="5" aria-pressed="false">5×</button>
+        <button type="button" data-speed="end" aria-pressed="false">Skip to end</button>
+      </div>
+      <div class="seg" role="group" aria-label="Data source">
+        <button type="button" aria-pressed="true">Simulator</button>
+        <button type="button" aria-pressed="false" title="Recorded persona runs come in milestone 8">Synthetic personas</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Sections">
+    <a href="#live" aria-current="page">Live experiment</a>
+    <a href="#after">After the experiment</a>
+  </nav>
+
+  <p class="story">
+    <strong>Questline</strong> is a fictional app where players earn coins for reaching milestones in mobile games.
+    Many new players never finish a first game. Half of new sign-ups now get a <strong>Starter Bonus</strong>:
+    the first milestone pays out right away. Does it get more players to finish their first milestone?
+  </p>
+
+  <main class="main" id="live">
+    <!-- PLAYERS -->
+    <section class="players" aria-labelledby="players-title">
+      <h2 class="half-title" id="players-title">What players see</h2>
+      <div class="experiences">
+        <figure class="exp">
+          <figcaption><span class="swatch"></span>Standard rewards</figcaption>
+          <div class="phone"><div class="screen" id="phone-c"></div></div>
+        </figure>
+        <figure class="exp">
+          <figcaption><span class="swatch t"></span>Starter Bonus</figcaption>
+          <div class="phone"><div class="screen" id="phone-t"></div></div>
+        </figure>
+        <p class="diff-note">The only difference: with the Starter Bonus, the <mark>40 coins for level 5 are paid right away</mark> instead of being held until level 10.</p>
+      </div>
+
+      <div class="lanes" aria-live="off">
+        <h2 class="half-title" style="margin:0">Players arriving</h2>
+        <div class="lane c">
+          <div class="lane-head"><span><span class="swatch"></span>Standard rewards</span><span class="num" id="lane-c-stats"></span></div>
+          <div class="dots" id="dots-c"></div>
+        </div>
+        <div class="lane t">
+          <div class="lane-head"><span><span class="swatch t"></span>Starter Bonus</span><span class="num" id="lane-t-stats"></span></div>
+          <div class="dots" id="dots-t"></div>
+        </div>
+        <div class="lanes-key">
+          <span><i class="on"></i>Finished first milestone</span>
+          <span><i></i>Did not</span>
+          <span>One dot for every 40 players. Tap a dot to follow that player.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYST -->
+    <section class="analyst" aria-labelledby="verdict">
+      <h2 class="half-title">What the analyst concludes</h2>
+      <p class="verdict" id="verdict" data-state="collect" aria-live="polite"></p>
+      <p class="verdict-line" id="verdict-line"></p>
+      <p class="verdict-meta num" id="verdict-meta"></p>
+
+      <div class="chart-wrap">
+        <svg class="chart" id="chart" viewBox="0 0 560 250" role="img" aria-label="Estimated lift over time with its 95% always-valid range"></svg>
+        <div class="legend">
+          <span><i class="lg-line"></i>Estimated lift</span>
+          <span><i class="lg-band"></i>Range the true lift is in (95%, safe to check anytime)</span>
+          <span><i class="lg-zero"></i>No difference</span>
+        </div>
+      </div>
+
+      <button class="details-btn" id="details-btn" type="button" aria-expanded="false" aria-controls="details">
+        Show details
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+      </button>
+
+      <div class="details" id="details" hidden>
+        <div>
+          <h3>Why we wait</h3>
+          <p class="sub">The usual interval assumes you look once. Looking every few seconds makes it cry wolf. The always-valid range is wider but stays honest however often you check.</p>
+          <div class="rows" id="compare-rows"></div>
+        </div>
+        <div>
+          <h3>Is the split fair?</h3>
+          <div class="check num" id="srm"></div>
+        </div>
+        <div>
+          <h3>Are the groups alike?</h3>
+          <p class="sub">Shares of each group at sign-up. Big gaps would mean the split went wrong.</p>
+          <div class="table-scroll"><table id="balance"></table></div>
+        </div>
+        <div>
+          <h3>Is any group being harmed?</h3>
+          <p class="sub">Lift within groups chosen before the test. Ranges are widened because we look at several.</p>
+          <div class="rows" id="segment-rows"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="story">
+  <div class="sheet" id="story-body"></div>
+</dialog>
+
+<script>
+/* ---------- tiny seeded PRNG (mockup only; the engine gets its own, tested) ---------- */
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function poisson(rng, lam) { // normal approx is fine for a mockup at lam ~ 300
+  const u = Math.max(rng(), 1e-12), v = rng();
+  return Math.max(0, Math.round(lam + Math.sqrt(lam) * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v)));
+}
+const fmt = n => n.toLocaleString("en-US");
+const pp = x => (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(1);
+
+/* ---------- phones ---------- */
+const coin = '<svg class="coin" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5.5" fill="var(--gold)"/><circle cx="6" cy="6" r="3.4" fill="none" stroke="var(--gold-ink)" stroke-width="1" opacity=".55"/></svg>';
+const lock = '<svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true"><rect x="1.5" y="4.5" width="7" height="5" rx="1" fill="currentColor"/><path d="M3 4.5V3a2 2 0 0 1 4 0v1.5" stroke="currentColor" fill="none" stroke-width="1.2"/></svg>';
+const gemIcon = '<svg viewBox="0 0 42 42" aria-hidden="true"><rect width="42" height="42" fill="#1c7c86"/><circle cx="34" cy="8" r="14" fill="#2aa3a8"/><path d="M21 9l9 8-9 16-9-16z" fill="#bff3ee"/><path d="M12 17h18l-9 16z" fill="#7fdcd6"/><path d="M21 9l-3 8h6z" fill="#fff" opacity=".7"/></svg>';
+function phone(bonus) {
+  const first = bonus
+    ? `<li class="bonus"><span>Reach level 5</span><span class="reward">${coin}40</span><small>Starter Bonus: paid right away</small></li>`
+    : `<li class="locked"><span>Reach level 5</span><span class="reward">${coin}40</span><small>${lock} Paid when you reach level 10</small></li>`;
+  return `
+    <div class="app-bar"><b>Questline</b><span class="balance">${coin}${bonus ? 40 : 0}</span></div>
+    <div class="game">${gemIcon}<div><b>Gem Harbor</b><span>Match-3 puzzle, about 5 min to level 5</span></div></div>
+    <div class="ms-title">Milestones</div>
+    <ul class="ms">
+      ${first}
+      <li><span>Reach level 10</span><span class="reward">${coin}120</span></li>
+      <li><span>Reach level 25</span><span class="reward">${coin}300</span></li>
+    </ul>
+    <div class="cta">Play and earn</div>`;
+}
+document.getElementById("phone-c").innerHTML = phone(false);
+document.getElementById("phone-t").innerHTML = phone(true);
+
+/* ---------- throwaway simulation ---------- */
+const TIERS = ["Tier 1", "Tier 2", "Tier 3"], DEVICES = ["iPhone", "Android"], CHANNELS = ["Organic", "Paid social", "Referral"];
+const SEGS = { "Country tier": TIERS, "Device": DEVICES, "Channel": CHANNELS };
+const BASE = 0.22, ALPHA = 0.05, MAX_N = 40000, BATCH = 600, DOT_EVERY = 40, MAX_DOTS = 140;
+const RHO2 = (-2 * Math.log(ALPHA) + Math.log(-2 * Math.log(ALPHA) + 1)) / 12000; // tuned for ~12k players
+
+let S;
+function reset(lift, seed) {
+  S = { lift, seed, rng: mulberry32(seed), n: 0, hour: 0, arms: [mk(), mk()], seg: {}, hist: [], sampled: [], done: false, nextId: 48000 };
+  for (const k in SEGS) S.seg[k] = SEGS[k].map(() => [mk(), mk()]);
+  document.getElementById("dots-c").innerHTML = ""; document.getElementById("dots-t").innerHTML = "";
+}
+function mk() { return { n: 0, y: 0, cov: { "Country tier": [0,0,0], "Device": [0,0], "Channel": [0,0,0] } }; }
+function pick(rng, ps) { let u = rng(), c = 0; for (let i = 0; i < ps.length; i++) { c += ps[i]; if (u < c) return i; } return ps.length - 1; }
+
+function tick() {
+  const rng = S.rng, k = poisson(rng, BATCH);
+  S.hour++;
+  const fresh = [[], []];
+  for (let i = 0; i < k; i++) {
+    const tier = pick(rng, [.3, .45, .25]), dev = pick(rng, [.38, .62]), ch = pick(rng, [.45, .4, .15]);
+    const arm = rng() < 0.5 ? 1 : 0;
+    const p = BASE + [0.05, 0, -0.06][tier] + (dev === 0 ? 0.02 : -0.012) + (arm ? S.lift : 0);
+    const y = rng() < p ? 1 : 0;
+    const a = S.arms[arm]; a.n++; a.y += y;
+    a.cov["Country tier"][tier]++; a.cov["Device"][dev]++; a.cov["Channel"][ch]++;
+    const ix = { "Country tier": tier, "Device": dev, "Channel": ch };
+    for (const s in ix) { const c = S.seg[s][ix[s]][arm]; c.n++; c.y += y; }
+    S.n++;
+    if (S.n % DOT_EVERY === 0) fresh[arm].push({ id: S.nextId++, arm, y, tier, dev, ch, hour: S.hour, rnd: rng() });
+  }
+  const st = stats(S.arms[0], S.arms[1]);
+  S.hist.push({ n: S.n, ...st });
+  if (st.lo > 0 || st.hi < 0 || S.n >= MAX_N) S.done = true;
+  return fresh;
+}
+
+function stats(c, t) {
+  const pc = c.y / Math.max(c.n, 1), pt = t.y / Math.max(t.n, 1), d = pt - pc, n = c.n + t.n;
+  const se = Math.sqrt(pc * (1 - pc) / Math.max(c.n, 1) + pt * (1 - pt) / Math.max(t.n, 1));
+  const naive = 1.96 * se;
+  // normal-mixture confidence sequence (Howard et al. style), placeholder for the engine's tested version
+  const sigma = se * Math.sqrt(n);
+  const cs = sigma * Math.sqrt(2 * (n * RHO2 + 1) / (n * n * RHO2) * Math.log(Math.sqrt(n * RHO2 + 1) / ALPHA));
+  return { pc, pt, d, naive, cs, lo: d - cs, hi: d + cs };
+}
+
+/* ---------- rendering ---------- */
+const svgNS = "http://www.w3.org/2000/svg";
+const $ = id => document.getElementById(id);
+
+function addDots(fresh) {
+  [["dots-c", fresh[0]], ["dots-t", fresh[1]]].forEach(([id, list]) => {
+    const box = $(id);
+    box.querySelectorAll(".new").forEach(d => d.classList.remove("new"));
+    list.forEach(p => {
+      const b = document.createElement("button");
+      b.className = "dot new" + (p.y ? " on" : "");
+      b.type = "button";
+      b.setAttribute("aria-label", `Player ${p.id}, ${p.y ? "finished" : "did not finish"} first milestone`);
+      b.addEventListener("click", () => openStory(p));
+      box.prepend(b);
+    });
+    while (box.children.length > MAX_DOTS) box.lastChild.remove();
+  });
+}
+
+function verdictText(st) {
+  if (st.lo > 0) return ["ship", "Ship"];
+  if (st.hi < 0) return ["stop", "Don't ship"];
+  if (S.n >= MAX_N) return ["done", "Inconclusive"];
+  return ["collect", "Keep collecting"];
+}
+const icons = {
+  collect: '<svg class="verdict-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><circle class="pulse" cx="10" cy="10" r="3.6" fill="currentColor"/></svg>',
+  ship: '<svg class="verdict-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M5.8 10.4l2.8 2.8 5.6-6" stroke="var(--bg)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  stop: '<svg class="verdict-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M6.8 6.8l6.4 6.4M13.2 6.8l-6.4 6.4" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  done: '<svg class="verdict-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M6 10h8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
+};
+
+function sentence(st, state) {
+  const n = fmt(S.n), lead = Math.abs(st.d * 100).toFixed(1);
+  const ahead = st.d >= 0 ? "ahead" : "behind";
+  if (state === "ship") return `After ${n} players the Starter Bonus is ${ahead} by ${lead} points, and the whole range is above zero. It's safe to ship.`;
+  if (state === "stop") return `After ${n} players the Starter Bonus is ${ahead} by ${lead} points, and the whole range is below zero. Don't ship it.`;
+  if (state === "done") return `We reached the ${fmt(MAX_N)}-player limit without a clear answer. Any effect is too small to tell apart from zero.`;
+  return `After ${n} players the Starter Bonus is ${ahead} by ${lead} points, but that could still be noise.`;
+}
+
+function render() {
+  const st = S.hist[S.hist.length - 1];
+  const [state, label] = verdictText(st);
+  const v = $("verdict"); v.dataset.state = state; v.innerHTML = icons[state] + label;
+  $("verdict-line").textContent = sentence(st, state);
+  $("verdict-meta").textContent = `Hour ${S.hour} of the test. Finished first milestone: ${(st.pc * 100).toFixed(1)}% standard, ${(st.pt * 100).toFixed(1)}% Starter Bonus.`;
+  $("lane-c-stats").textContent = `${fmt(S.arms[0].n)} players, ${(st.pc * 100).toFixed(1)}% finished`;
+  $("lane-t-stats").textContent = `${fmt(S.arms[1].n)} players, ${(st.pt * 100).toFixed(1)}% finished`;
+  drawChart();
+  if (!$("details").hidden) drawDetails(st);
+}
+
+function drawChart() {
+  const W = 560, H = 250, L = 44, R = 12, T = 12, B = 30;
+  const xMax = Math.max(12000, Math.ceil(S.n * 1.25 / 4000) * 4000);
+  const pts = S.hist.filter(h => h.n > 400);
+  let yLo = -0.04, yHi = 0.08;
+  pts.forEach(h => { yLo = Math.min(yLo, h.lo); yHi = Math.max(yHi, h.hi); });
+  yLo = Math.max(yLo, -0.15); yHi = Math.min(yHi, 0.2);
+  const step = 0.02;
+  yLo = Math.floor(yLo / step) * step; yHi = Math.ceil(yHi / step) * step;
+  const x = n => L + (n / xMax) * (W - L - R);
+  const y = v => T + (yHi - Math.max(yLo, Math.min(yHi, v))) / (yHi - yLo) * (H - T - B);
+  let s = "";
+  for (let g = yLo; g <= yHi + 1e-9; g += step) {
+    const gy = y(g), zero = Math.abs(g) < 1e-9;
+    if (!zero) s += `<line x1="${L}" x2="${W - R}" y1="${gy}" y2="${gy}" stroke="var(--line)" />`;
+    s += `<text x="${L - 8}" y="${gy + 4}" text-anchor="end">${zero ? "0" : pp(g)}</text>`;
+  }
+  for (let xv = 0; xv <= xMax; xv += xMax / 4) s += `<text x="${x(xv)}" y="${H - 8}" text-anchor="${xv === 0 ? "start" : xv === xMax ? "end" : "middle"}">${xv === 0 ? "0 players" : fmt(xv)}</text>`;
+  s += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1.5"/>`;
+  if (pts.length > 1) {
+    const up = pts.map(h => `${x(h.n)},${y(h.hi)}`).join(" ");
+    const dn = pts.slice().reverse().map(h => `${x(h.n)},${y(h.lo)}`).join(" ");
+    s += `<polygon points="${up} ${dn}" fill="var(--gold)" fill-opacity=".2"/>`;
+    s += `<polyline points="${pts.map(h => `${x(h.n)},${y(h.d)}`).join(" ")}" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linejoin="round"/>`;
+    const last = pts[pts.length - 1];
+    s += `<circle cx="${x(last.n)}" cy="${y(last.d)}" r="4.5" fill="var(--gold)" stroke="var(--bg)" stroke-width="2"/>`;
+    s += `<text x="${Math.min(x(last.n) + 8, W - R - 40)}" y="${y(last.d) - 8}" style="fill:var(--ink);font-weight:600">${pp(last.d)} pts</text>`;
+  }
+  $("chart").innerHTML = s;
+}
+
+function intervalBar(lo, hi, est, dom, color) {
+  const W = 300, x = v => ((Math.max(dom[0], Math.min(dom[1], v)) - dom[0]) / (dom[1] - dom[0])) * W;
+  return `<svg viewBox="0 0 ${W} 18" preserveAspectRatio="none" aria-hidden="true">
+    <line x1="${x(0)}" x2="${x(0)}" y1="0" y2="18" stroke="var(--muted)" stroke-dasharray="3 3"/>
+    <rect x="${x(lo)}" y="6" width="${Math.max(2, x(hi) - x(lo))}" height="6" rx="3" fill="${color}" fill-opacity=".35"/>
+    <rect x="${x(est) - 1.5}" y="2" width="3" height="14" rx="1.5" fill="${color}"/></svg>`;
+}
+
+function drawDetails(st) {
+  const dom = [Math.min(-0.03, st.lo - 0.01), Math.max(0.07, st.hi + 0.01)];
+  const range = (lo, hi) => `${pp(lo)} to ${pp(hi)}`;
+  $("compare-rows").innerHTML =
+    `<div class="row"><span>Always-valid<br><small style="color:var(--muted)">used for the decision</small></span>${intervalBar(st.lo, st.hi, st.d, dom, "var(--gold)")}<span class="val num">${range(st.lo, st.hi)}</span></div>
+     <div class="row"><span>Usual interval<br><small style="color:var(--muted)">only valid if you look once</small></span>${intervalBar(st.d - st.naive, st.d + st.naive, st.d, dom, "var(--control)")}<span class="val num">${range(st.d - st.naive, st.d + st.naive)}</span></div>`;
+
+  const c = S.arms[0].n, t = S.arms[1].n, n = c + t;
+  const z = (t - n / 2) / Math.sqrt(n / 4);
+  const ok = Math.abs(z) < 3.29; // ~p > .001
+  $("srm").innerHTML = `<b style="color:${ok ? "var(--ship)" : "var(--stop)"}">${ok ? "Looks fine." : "Check the split."}</b><span>${(c / n * 100).toFixed(1)}% standard, ${(t / n * 100).toFixed(1)}% Starter Bonus. Expected 50 / 50.</span>`;
+
+  let rows = `<thead><tr><th></th><th>Standard</th><th>Starter Bonus</th></tr></thead><tbody>`;
+  for (const k in SEGS) SEGS[k].forEach((lvl, i) => {
+    rows += `<tr><td>${lvl}</td><td>${(S.arms[0].cov[k][i] / c * 100).toFixed(1)}%</td><td>${(S.arms[1].cov[k][i] / t * 100).toFixed(1)}%</td></tr>`;
+  });
+  $("balance").innerHTML = rows + "</tbody>";
+
+  const K = Object.values(SEGS).reduce((a, l) => a + l.length, 0);
+  const aK = ALPHA / K;
+  let segRows = "";
+  for (const k in SEGS) SEGS[k].forEach((lvl, i) => {
+    const [sc, stt] = S.seg[k][i];
+    const pc = sc.y / Math.max(sc.n, 1), pt = stt.y / Math.max(stt.n, 1), d = pt - pc, m = sc.n + stt.n;
+    const se = Math.sqrt(pc * (1 - pc) / Math.max(sc.n, 1) + pt * (1 - pt) / Math.max(stt.n, 1)), sig = se * Math.sqrt(m);
+    const hw = sig * Math.sqrt(2 * (m * RHO2 + 1) / (m * m * RHO2) * Math.log(Math.sqrt(m * RHO2 + 1) / aK));
+    const harmed = d + hw < 0;
+    segRows += `<div class="row"><span>${lvl}<br><small style="color:var(--muted)">${k}</small></span>${intervalBar(d - hw, d + hw, d, [-0.12, 0.16], harmed ? "var(--stop)" : "var(--gold)")}<span class="val num">${pp(d)} pts</span></div>`;
+  });
+  $("segment-rows").innerHTML = segRows;
+}
+
+/* ---------- player story ---------- */
+const NAMES = ["Ana", "Kofi", "Mei", "Lukas", "Priya", "Diego", "Sara", "Tomás", "Aylin", "Jun"];
+const REASONS_YES = ["The coins showed up right after level 5, so I kept going.", "Level 5 was quick and the reward was worth it.", "I play on the bus anyway, this was easy money."];
+const REASONS_NO = ["I got bored before anything paid out.", "Ten levels felt like a lot before seeing any coins.", "I installed it and forgot about it."];
+function openStory(p) {
+  const r = mulberry32(p.id * 7919);
+  const name = NAMES[Math.floor(r() * NAMES.length)];
+  const day = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][Math.floor(p.hour / 24) % 7];
+  const hh = String(Math.floor(r() * 24)).padStart(2, "0"), mm = String(Math.floor(r() * 60)).padStart(2, "0");
+  const started = r() < (p.y ? 1 : 0.55), startMin = 4 + Math.floor(r() * 50);
+  const msHours = (1 + r() * 30).toFixed(0);
+  const bonus = p.arm === 1;
+  const reasons = p.y ? REASONS_YES : REASONS_NO;
+  $("story-body").innerHTML = `
+    <div class="sheet-head">
+      <div>
+        <h2>${name}, player ${p.id}</h2>
+        <span class="arm-chip"><span class="swatch ${bonus ? "t" : ""}"></span>${bonus ? "Starter Bonus" : "Standard rewards"}</span>
+      </div>
+      <button class="close" type="button" aria-label="Close" onclick="this.closest('dialog').close()">×</button>
+    </div>
+    <dl class="profile">
+      <dt>Country</dt><dd>${TIERS[p.tier]}</dd>
+      <dt>Device</dt><dd>${DEVICES[p.dev]}</dd>
+      <dt>Came from</dt><dd>${CHANNELS[p.ch]}</dd>
+    </dl>
+    <ol class="journey">
+      <li class="done">Signed up<time>${day} ${hh}:${mm}</time></li>
+      <li class="done">Assigned to ${bonus ? "Starter Bonus" : "standard rewards"}<time>at sign-up, by a hash of the player ID</time></li>
+      <li class="${started ? "done" : "miss"}">${started ? "Started Gem Harbor" : "Never started a game"}${started ? `<time>${startMin} min after sign-up</time>` : ""}</li>
+      <li class="${p.y ? "done" : "miss"}">${p.y ? "Reached level 5" : "Did not reach level 5"}${p.y ? `<time>${msHours} h after sign-up${bonus ? ", 40 coins paid" : ", 40 coins on hold until level 10"}</time>` : ""}</li>
+      <li class="done">Counted in the analysis<time>when the 72-hour window closed</time></li>
+    </ol>
+    <p class="quote">“${reasons[Math.floor(r() * reasons.length)]}”<small>Persona runs will carry the persona's own reason. This one is a placeholder.</small></p>`;
+  $("story").showModal();
+}
+$("story").addEventListener("click", e => { if (e.target.id === "story") e.target.close(); });
+
+/* ---------- controls ---------- */
+let playing = true, speed = 1, timer = null;
+function schedule() {
+  clearTimeout(timer);
+  if (!playing || S.done) return;
+  const base = (2000 + S.rng() * 1000) / speed;
+  timer = setTimeout(() => { addDots(tick()); render(); schedule(); }, base);
+}
+function setPlaying(p) {
+  playing = p;
+  $("play").setAttribute("aria-label", p ? "Pause" : "Play");
+  $("play-icon").innerHTML = p ? '<rect x="2" y="1" width="3.5" height="12" rx="1"/><rect x="8.5" y="1" width="3.5" height="12" rx="1"/>' : '<path d="M3 1.5v11l9.5-5.5z"/>';
+  schedule();
+}
+$("play").addEventListener("click", () => setPlaying(!playing));
+document.querySelectorAll("[data-speed]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-speed]").forEach(x => x.setAttribute("aria-pressed", x === b));
+  if (b.dataset.speed === "end") {
+    let f = [[], []];
+    while (!S.done) { const g = tick(); f[0].push(...g[0]); f[1].push(...g[1]); }
+    addDots([f[0].slice(-MAX_DOTS), f[1].slice(-MAX_DOTS)]); render(); setPlaying(false); return;
+  }
+  speed = +b.dataset.speed; schedule();
+}));
+$("details-btn").addEventListener("click", e => {
+  const open = $("details").hidden;
+  $("details").hidden = !open;
+  e.currentTarget.setAttribute("aria-expanded", open);
+  e.currentTarget.firstChild.textContent = open ? "Hide details " : "Show details ";
+  if (open) drawDetails(S.hist[S.hist.length - 1]);
+});
+document.querySelectorAll("[data-theme-set]").forEach(b => b.addEventListener("click", () => {
+  const v = b.dataset.themeSet;
+  if (v === "system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.dataset.theme = v;
+  document.querySelectorAll("[data-theme-set]").forEach(x => x.setAttribute("aria-pressed", x === b));
+}));
+document.querySelectorAll("[data-lift]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-lift]").forEach(x => x.setAttribute("aria-pressed", x === b));
+  start(+b.dataset.lift);
+}));
+
+function start(lift) {
+  reset(lift, 20261011);
+  for (let i = 0; i < 6; i++) addDots(tick()); // open mid-run so the first frame shows a working state
+  render();
+  document.querySelectorAll("[data-speed]").forEach(x => x.setAttribute("aria-pressed", x.dataset.speed === "1"));
+  speed = 1; setPlaying(true);
+}
+start(0.05);
+</script>

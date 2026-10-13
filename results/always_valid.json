@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-12",
+  "seed": 20261016,
+  "runs": 2000,
+  "alpha": 0.05,
+  "n_star": 30000,
+  "min_players": 1000,
+  "max_players": 30000,
+  "checks": {
+    "No effect | every live update": {
+      "looks_per_run": 58,
+      "always_valid": {
+        "false_verdict": {
+          "rate": 0.0145,
+          "ci_low": 0.01011467734679028,
+          "ci_high": 0.02074677556330632,
+          "runs": 2000
+        },
+        "coverage_every_look": {
+          "rate": 0.9855,
+          "ci_low": 0.9792532244366937,
+          "ci_high": 0.9898853226532097,
+          "runs": 2000
+        },
+        "ship_by_max": {
+          "rate": 0.008,
+          "ci_low": 0.0049302968532159265,
+          "ci_high": 0.012956077671536961,
+          "runs": 2000
+        }
+      },
+      "usual_interval": {
+        "false_verdict": {
+          "rate": 0.303,
+          "ci_low": 0.2832529034543463,
+          "ci_high": 0.32350241317446726,
+          "runs": 2000
+        },
+        "coverage_every_look": {
+          "rate": 0.697,
+          "ci_low": 0.6764975868255326,
+          "ci_high": 0.7167470965456536,
+          "runs": 2000
+        }
+      }
+    },
+    "No effect | every 50 players": {
+      "looks_per_run": 600,
+      "always_valid": {
+        "false_verdict": {
+          "rate": 0.016,
+          "ci_low": 0.011356235350080627,
+          "ci_high": 0.02249946641817221,
+          "runs": 2000
+        },
+        "coverage_every_look": {
+          "rate": 0.984,
+          "ci_low": 0.9775005335818276,
+          "ci_high": 0.9886437646499193,
+          "runs": 2000
+        },
+        "ship_by_max": {
+          "rate": 0.006,
+          "ci_low": 0.0034355943769362337,
+          "ci_high": 0.010458448336941664,
+          "runs": 2000
+        }
+      },
+      "usual_interval": {
+        "false_verdict": {
+          "rate": 0.355,
+          "ci_low": 0.33432485348219587,
+          "ci_high": 0.3762310902293674,
+          "runs": 2000
+        },
+        "coverage_every_look": {
+          "rate": 0.645,
+          "ci_low": 0.6237689097706325,
+          "ci_high": 0.6656751465178041,
+          "runs": 2000
+        }
+      }
+    },
+    "Small real effect | every live update": {
+      "looks_per_run": 58,
+      "always_valid": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.9885,
+          "ci_low": 0.9828022720924287,
+          "ci_high": 0.9923247727137873,
+          "runs": 2000
+        },
+        "ship_by_max": {
+          "rate": 0.907,
+          "ci_low": 0.8934795252227157,
+          "ci_high": 0.9189599982903445,
+          "runs": 2000
+        }
+      },
+      "usual_interval": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.695,
+          "ci_low": 0.6744641857496321,
+          "ci_high": 0.7147881658106792,
+          "runs": 2000
+        }
+      }
+    },
+    "Small real effect | every 50 players": {
+      "looks_per_run": 600,
+      "always_valid": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.983,
+          "ci_low": 0.9763388128481535,
+          "ci_high": 0.987809319478156,
+          "runs": 2000
+        },
+        "ship_by_max": {
+          "rate": 0.9155,
+          "ci_low": 0.9024995017830912,
+          "ci_high": 0.9269074319261874,
+          "runs": 2000
+        }
+      },
+      "usual_interval": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.5975,
+          "ci_low": 0.5758404814872059,
+          "ci_high": 0.6187856942929498,
+          "runs": 2000
+        }
+      }
+    },
+    "Large effect | every live update": {
+      "looks_per_run": 58,
+      "always_valid": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.989,
+          "ci_low": 0.9834005531702528,
+          "ci_high": 0.9927245745886817,
+          "runs": 2000
+        },
+        "ship_by_max": {
+          "rate": 1.0,
+          "ci_low": 0.9980829527187469,
+          "ci_high": 0.9999999999999998,
+          "runs": 2000
+        }
+      },
+      "usual_interval": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.6865,
+          "ci_low": 0.6658271949091686,
+          "ci_high": 0.7064577464549239,
+          "runs": 2000
+        }
+      }
+    },
+    "Large effect | every 50 players": {
+      "looks_per_run": 600,
+      "always_valid": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.9785,
+          "ci_low": 0.9711661662609156,
+          "ci_high": 0.9839992194909254,
+          "runs": 2000
+        },
+        "ship_by_max": {
+          "rate": 1.0,
+          "ci_low": 0.9980829527187469,
+          "ci_high": 0.9999999999999998,
+          "runs": 2000
+        }
+      },
+      "usual_interval": {
+        "false_verdict": null,
+        "coverage_every_look": {
+          "rate": 0.61,
+          "ci_low": 0.5884323924516162,
+          "ci_high": 0.6311458571465081,
+          "runs": 2000
+        }
+      }
+    }
+  },
+  "all_passed": true
+}
