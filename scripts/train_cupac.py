@@ -17,7 +17,7 @@ def main():
     cohort, _ = simulate(0.0, seed=COHORT_SEED)  # before the test: standard rewards for everyone
     m = train(cohort)
     m["cohort_seed"] = COHORT_SEED
-    CUPAC_PATH.write_text(json.dumps(m, indent=2))
+    CUPAC_PATH.write_text(json.dumps(m, indent=2), newline="\n")   # LF: the page's precompute hash reads these bytes
     print(f"wrote {CUPAC_PATH.name}: theta {m['theta']:.3f}, mu {m['mu']:.4f}, holdout R² {m['r2_holdout']:.3f}")
 
 

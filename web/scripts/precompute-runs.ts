@@ -28,5 +28,7 @@ for (const p of presets(cfg)) {
 }
 
 const file = resolve(import.meta.dirname, '../public/runs.json');
-writeFileSync(file, JSON.stringify({ configHash: murmur3_32(new TextEncoder().encode(tomlText + cupacText)), runs: RUNS, firstSeed: FIRST_SEED, presets: out }));
+// hashed with LF line endings, so Windows (CRLF) and Linux (CI) checkouts agree
+const configHash = murmur3_32(new TextEncoder().encode((tomlText + cupacText).replace(/\r\n/g, '\n')));
+writeFileSync(file, JSON.stringify({ configHash, runs: RUNS, firstSeed: FIRST_SEED, presets: out }));
 console.log(`wrote ${file}`);

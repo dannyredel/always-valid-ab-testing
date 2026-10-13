@@ -75,7 +75,7 @@ describe('parallel worlds', () => {
 describe('pre-computed runs', () => {
   it('were built from the current config (else: npm run precompute)', () => {
     const pre = JSON.parse(readFileSync(resolve(__dirname, '../../public/runs.json'), 'utf8'));
-    expect(pre.configHash).toBe(murmur3_32(new TextEncoder().encode(tomlText + cupacText)));
+    expect(pre.configHash).toBe(murmur3_32(new TextEncoder().encode((tomlText + cupacText).replace(/\r\n/g, '\n'))));
     expect(Object.keys(pre.presets).sort()).toEqual(['large', 'none', 'small']);
     expect(pre.presets.small).toHaveLength(1000);
   });
